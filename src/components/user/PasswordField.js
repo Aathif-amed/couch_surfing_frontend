@@ -20,7 +20,7 @@ function PasswordField({ passwordRef, id = "password", label = "Password" }) {
       type={showPassword ? "text" : "password"}
       fullWidth
       inputRef={passwordRef}
-      inputProps={{ minLength: 8 }}
+      inputProps={{ minLength: 6 }}
       required
       InputProps={{
         endAdornment: (

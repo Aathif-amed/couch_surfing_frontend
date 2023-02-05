@@ -1,10 +1,13 @@
 import { Mail, Notifications } from "@mui/icons-material";
 import { Avatar, Badge, Box, IconButton, Tooltip } from "@mui/material";
 import React, { useState } from "react";
-import { useValue } from "../../Context/ContextProvider";
+import { useValue } from "../../context/ContextProvider";
+import CheckGUserToken from "../../hooks/CheckGUserToken";
 import UserMenu from "./UserMenu";
 
 function UserIcons() {
+  CheckGUserToken();
+
   const {
     state: { currentUser },
   } = useValue();
@@ -24,8 +27,8 @@ function UserIcons() {
       </IconButton>
       <Tooltip title="Open User Settings">
         <IconButton onClick={(e)=>{setAnchorUserMenu(e.currentTarget)}}>
-          <Avatar src={currentUser?.photoURL} alt={currentUser?.name}>
-            {currentUser?.name?.charAt(0).toUpperCase()}
+          <Avatar src={currentUser?.photoURL} alt={currentUser?.fName}>
+            {currentUser?.fName?.charAt(0).toUpperCase()}
           </Avatar>
         </IconButton>
       </Tooltip>

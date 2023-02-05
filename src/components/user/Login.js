@@ -1,4 +1,4 @@
-import { Close, Send } from '@mui/icons-material';
+import { Close, Send } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -8,55 +8,60 @@ import {
   DialogTitle,
   IconButton,
   TextField,
-} from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
-import { useValue } from '../../Context/ContextProvider';
-import GoogleOneTapLogin from './GoogleOneTapLogin';
-import PasswordField from './PasswordField';
-
+} from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { login, register } from "../../actions/user";
+import { useValue } from "../../context/ContextProvider";
+import GoogleOneTapLogin from "./GoogleOneTapLogin";
+import PasswordField from "./PasswordField";
 
 const Login = () => {
   const {
     state: { openLogin },
     dispatch,
   } = useValue();
-  const [title, setTitle] = useState('Login');
+  const [title, setTitle] = useState("Login");
   const [isRegister, setIsRegister] = useState(false);
-  const nameRef = useRef();
+  const fNameRef = useRef();
+  const lNameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
   const handleClose = () => {
-    dispatch({ type: 'CLOSE_LOGIN' });
+    dispatch({ type: "CLOSE_LOGIN" });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // testing Loading
-    dispatch({ type: 'START_LOADING' });
-
-    setTimeout(() => {
-      dispatch({ type: 'END_LOADING' });
-    }, 6000);
-
-    //testing Notification
+    const email = emailRef.current.value;
+    console.log(email);
     const password = passwordRef.current.value;
+    //send login request if its not register and return
+    if (!isRegister) {
+      return login({ email, password }, dispatch);
+    }
+
+    const fName = fNameRef.current.value;
+    const lName = lNameRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
+
     if (password !== confirmPassword) {
-      dispatch({
-        type: 'UPDATE_ALERT',
+      return dispatch({
+        type: "UPDATE_ALERT",
         payload: {
           open: true,
-          severity: 'error',
-          message: 'Passwords do not match',
+          severity: "error",
+          message: "Password does not match",
         },
       });
     }
+    //send register request
+    register({ fName, lName, email, password }, dispatch);
   };
 
   useEffect(() => {
-    isRegister ? setTitle('Register') : setTitle('Login');
+    isRegister ? setTitle("Register") : setTitle("Login");
   }, [isRegister]);
   return (
     <Dialog open={openLogin} onClose={handleClose}>
@@ -64,7 +69,7 @@ const Login = () => {
         {title}
         <IconButton
           sx={{
-            position: 'absolute',
+            position: "absolute",
             top: 8,
             right: 8,
             color: (theme) => theme.palette.grey[500],
@@ -80,18 +85,29 @@ const Login = () => {
             Please fill your information in the fields below:
           </DialogContentText>
           {isRegister && (
-            <TextField
-              autoFocus
-              margin="normal"
-              variant="standard"
-              id="name"
-              label="Name"
-              type="text"
-              fullWidth
-              inputRef={nameRef}
-              inputProps={{ minLength: 2 }}
-              required
-            />
+            <>
+              <TextField
+                autoFocus
+                margin="normal"
+                variant="standard"
+                id="fName"
+                label="First Name"
+                type="text"
+                fullWidth
+                inputRef={fNameRef}
+                inputProps={{ minLength: 2 }}
+                required
+              />
+              <TextField
+                margin="normal"
+                variant="standard"
+                id="lName"
+                label="Last Name"
+                type="text"
+                fullWidth
+                inputRef={lNameRef}
+              />
+            </>
           )}
           <TextField
             autoFocus={!isRegister}
@@ -113,21 +129,25 @@ const Login = () => {
             />
           )}
         </DialogContent>
-        <DialogActions sx={{ px: '19px' }}>
+        <DialogActions sx={{ px: "19px" }}>
           <Button type="submit" variant="contained" endIcon={<Send />}>
             Submit
           </Button>
         </DialogActions>
       </form>
-      <DialogActions sx={{ justifyContent: 'center' }}>
+      <DialogActions sx={{ justifyContent: "center" }}>
         {isRegister
-          ? 'Do you have an account? Sign in now '
+          ? "Do you have an account? Sign in now "
           : "Don't you have an account? Create one now "}
-        <Button color='info' onClick={() => setIsRegister(!isRegister)} sx={{marginTop:'4px'}}>
-          {isRegister ? 'Login' : 'Register'}
+        <Button
+          color="info"
+          onClick={() => setIsRegister(!isRegister)}
+          sx={{ marginTop: "4px" }}
+        >
+          {isRegister ? "Login" : "Register"}
         </Button>
       </DialogActions>
-      <DialogActions sx={{ justifyContent: 'center', py: '24px' }}>
+      <DialogActions sx={{ justifyContent: "center", py: "24px" }}>
         <GoogleOneTapLogin />
       </DialogActions>
     </Dialog>
