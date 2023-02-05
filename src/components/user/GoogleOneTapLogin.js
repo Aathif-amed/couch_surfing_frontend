@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
-import { useValue } from "../../Context/ContextProvider";
+import { useValue } from "../../context/ContextProvider";
 import Gicon from "./Gicon";
 import jwtDecode from "jwt-decode";
 
@@ -25,7 +25,9 @@ function GoogleOneTapLogin() {
       window.google.accounts.id.prompt((notification) => {
 
         if (notification.isNotDisplayed()) {
-          throw new Error("Try to Clear Cookies or try again later!");
+          setDisabled(false);
+          throw new Error(`Try to Clear Cookies or try again later!
+          Hint: GoTo: Application=>Cookies>set gstate:{"i_l":0}`);
         }
         if (
           notification.isSkippedMoment() ||
