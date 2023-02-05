@@ -1,6 +1,6 @@
 import { Alert, Snackbar } from "@mui/material";
 import React from "react";
-import { useValue } from "../Context/ContextProvider";
+import { useValue } from "../context/ContextProvider";
 
 function Notification() {
   const {
