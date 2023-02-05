@@ -11,6 +11,10 @@ const reducer = (state, action) => {
     case "UPDATE_ALERT":
       return { ...state, alert: action.payload };
     case "UPDATE_USER":
+      localStorage.setItem(
+        process.env.REACT_APP_USER_DETAILS,
+        JSON.stringify(action.payload)
+      );
       return { ...state, currentUser: action.payload };
     default:
       throw new Error("No matched Action");
