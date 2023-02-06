@@ -10,6 +10,11 @@ const initialState = {
     severity: "info",
     message: "",
   },
+  profile: {
+    open: false,
+    file: null,
+    photoURL: "",
+  },
 };
 
 const Context = createContext(initialState);
