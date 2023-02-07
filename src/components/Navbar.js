@@ -20,6 +20,7 @@ function Navbar() {
     dispatch
   } = useValue();
   return (
+      <>
     <AppBar maxwidth="lg">
       <Container>
         <Toolbar disableGutters>
@@ -54,6 +55,8 @@ function Navbar() {
         </Toolbar>
       </Container>
     </AppBar>
+    <Toolbar/>
+      </>
   );
 }
 
