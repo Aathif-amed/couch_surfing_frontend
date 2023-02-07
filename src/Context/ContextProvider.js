@@ -15,6 +15,7 @@ const initialState = {
     file: null,
     photoURL: "",
   },
+  images:[]
 };
 
 const Context = createContext(initialState);

@@ -18,6 +18,10 @@ const reducer = (state, action) => {
         JSON.stringify(action.payload)
       );
       return { ...state, currentUser: action.payload };
+    case "UPDATE_IMAGES":
+      return { ...state, images:[...state.images, action.payload] };
+    case "DELETE_IMAGE":
+      return { ...state, images:state.images.filter(image=>image!==action.payload) };
     default:
       throw new Error("No matched Action");
   }
