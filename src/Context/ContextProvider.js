@@ -20,6 +20,10 @@ const initialState = {
     title:'',
     description:'',
     price:0
+  },
+  location:{
+    longitude:0,
+    latitude:0,
   }
 };
 
