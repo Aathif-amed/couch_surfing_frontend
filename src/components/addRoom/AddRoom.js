@@ -15,13 +15,13 @@ import AddLocation from "./addLocation/AddLocation";
 
 function AddRoom() {
   const {
-    state: { images },
+    state: { images, details },
   } = useValue();
   const [activeStep, setActiveStep] = useState(0);
   const [steps, setSteps] = useState([
     { label: "Location", completed: false },
     { label: "Details", completed: false },
-    { label: "Images", completed: true },
+    { label: "Images", completed: false },
   ]);
 
   const handleNext = () => {
@@ -49,24 +49,34 @@ function AddRoom() {
     return steps.findIndex((step) => !step.completed);
   };
 
-  useEffect(()=>{
-    if(images.length){
-        if(!steps[2].completed){
-            setComplete(2,true)
-        }
+  useEffect(() => {
+    if (images.length) {
+      if (!steps[2].completed) {
+        setComplete(2, true);
+      }
+    } else {
+      if (steps[2].completed) {
+        setComplete(2, false);
+      }
     }
-    else{
-        if(steps[2].completed){
-            setComplete(2,false)
-        }
+  }, [images]);
+  useEffect(() => {
+    if (details.title.length > 4 && details.description.length > 9) {
+      if (!steps[1].completed) {
+        setComplete(1, true);
+      }
+    } else {
+      if (steps[1].completed) {
+        setComplete(1, false);
+      }
     }
-  },[images])
-const setComplete=(index,status)=>{
-    setSteps(steps=>{
-        steps[index].completed=status;
-        return [...steps]
-    })
-}
+  }, [details]);
+  const setComplete = (index, status) => {
+    setSteps((steps) => {
+      steps[index].completed = status;
+      return [...steps];
+    });
+  };
   return (
     <Container sx={{ my: 4 }}>
       <Stepper
