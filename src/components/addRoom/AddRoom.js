@@ -15,7 +15,7 @@ import AddLocation from "./addLocation/AddLocation";
 
 function AddRoom() {
   const {
-    state: { images, details },
+    state: { location, details, images },
   } = useValue();
   const [activeStep, setActiveStep] = useState(0);
   const [steps, setSteps] = useState([
@@ -49,17 +49,26 @@ function AddRoom() {
     return steps.findIndex((step) => !step.completed);
   };
 
+  const setComplete = (index, status) => {
+    setSteps((steps) => {
+      steps[index].completed = status;
+      return [...steps];
+    });
+  };
+  //checking whether location step completed
   useEffect(() => {
-    if (images.length) {
-      if (!steps[2].completed) {
-        setComplete(2, true);
+    if (location.longitude || location.latitude) {
+      if (!steps[0].completed) {
+        setComplete(0, true);
       }
     } else {
-      if (steps[2].completed) {
-        setComplete(2, false);
+      if (steps[0].completed) {
+        setComplete(0, false);
       }
     }
-  }, [images]);
+  }, [location]);
+
+  //checking whether  details completed
   useEffect(() => {
     if (details.title.length > 4 && details.description.length > 9) {
       if (!steps[1].completed) {
@@ -71,12 +80,20 @@ function AddRoom() {
       }
     }
   }, [details]);
-  const setComplete = (index, status) => {
-    setSteps((steps) => {
-      steps[index].completed = status;
-      return [...steps];
-    });
-  };
+
+  //checking whether images completed
+  useEffect(() => {
+    if (images.length) {
+      if (!steps[2].completed) {
+        setComplete(2, true);
+      }
+    } else {
+      if (steps[2].completed) {
+        setComplete(2, false);
+      }
+    }
+  }, [images]);
+
   return (
     <Container sx={{ my: 4 }}>
       <Stepper
