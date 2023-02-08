@@ -2,7 +2,7 @@ import { Check } from "@mui/icons-material";
 import { Avatar, InputAdornment, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useValue } from "../../../context/ContextProvider";
-import pendingIcon from "./icons/progress.svg";
+import pendingIcon from "./icons/loading.svg";
 let timer;
 function InfoField({ mainProps, optionalProps = {}, minLength }) {
   const { dispatch } = useValue();
