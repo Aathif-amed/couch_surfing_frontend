@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import AddRoom from "./addRoom/AddRoom";
+import Protected from "./protected/Protected";
 import ClusterMap from "./map/ClusterMap";
 import Room from "./rooms/Room";
 
@@ -22,7 +23,8 @@ function BottomNav() {
         {
           0: <ClusterMap />,
           1: <Room />,
-          2: <AddRoom setPage={setValue}/>,
+          //the children component can be accessed only if logged in
+          2:  <Protected> <AddRoom setPage={setValue}/></Protected>,
         }[value]
       }
       <Paper
