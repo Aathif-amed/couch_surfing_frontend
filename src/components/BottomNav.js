@@ -22,7 +22,7 @@ function BottomNav() {
         {
           0: <ClusterMap />,
           1: <Room />,
-          2: <AddRoom />,
+          2: <AddRoom setPage={setValue}/>,
         }[value]
       }
       <Paper
