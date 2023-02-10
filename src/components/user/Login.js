@@ -35,7 +35,6 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const email = emailRef.current.value;
-    console.log(email);
     const password = passwordRef.current.value;
     //send login request if its not register and return
     if (!isRegister) {
