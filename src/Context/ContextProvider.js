@@ -24,7 +24,8 @@ const initialState = {
   location:{
     longitude:0,
     latitude:0,
-  }
+  },
+  rooms:[]
 };
 
 const Context = createContext(initialState);

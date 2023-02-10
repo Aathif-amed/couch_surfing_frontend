@@ -19,24 +19,32 @@ const reducer = (state, action) => {
       );
       return { ...state, currentUser: action.payload };
     case "UPDATE_IMAGES":
-      return { ...state, images:[...state.images, action.payload] };
+      return { ...state, images: [...state.images, action.payload] };
     case "DELETE_IMAGE":
-      return { ...state, images:state.images.filter(image=>image!==action.payload) };
+      return {
+        ...state,
+        images: state.images.filter((image) => image !== action.payload),
+      };
     case "UPDATE_DETAILS":
-      return { ...state, details:{...state.details,...action.payload}};
+      return { ...state, details: { ...state.details, ...action.payload } };
     case "UPDATE_LOCATION":
-      return { ...state, location:action.payload};
+      return { ...state, location: action.payload };
     case "RESET_ROOM":
-      return { ...state, images:[],
-        details:{
-          title:'',
-          description:'',
-          price:0
+      return {
+        ...state,
+        images: [],
+        details: {
+          title: "",
+          description: "",
+          price: 0,
         },
-        location:{
-          longitude:0,
-          latitude:0,
-        }};
+        location: {
+          longitude: 0,
+          latitude: 0,
+        },
+      };
+    case "UPDATE_ROOMS":
+      return { ...state, rooms: action.payload };
     default:
       throw new Error("No matched Action");
   }
