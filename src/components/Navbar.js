@@ -21,8 +21,8 @@ function Navbar() {
   } = useValue();
   return (
       <>
-    <AppBar maxwidth="lg">
-      <Container>
+    <AppBar >
+      <Container maxWidth="lg">
         <Toolbar disableGutters>
           <Box sx={{ mx: 1 }}>
             <IconButton size="large" color="inherit">
