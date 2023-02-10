@@ -44,10 +44,67 @@ const reducer = (state, action) => {
         },
       };
     case "UPDATE_ROOMS":
-      return { ...state, rooms: action.payload };
+      return {
+        ...state,
+        rooms: action.payload,
+        addressFilter: null,
+        priceFilter: 500,
+        filteredRooms: action.payload,
+      };
+    case "PRICE_FILTER":
+      return {
+        ...state,
+        priceFilter: action.payload,
+        filteredRooms: applyFilter(
+          state.rooms,
+          state.addressFilter,
+          action.payload
+        ),
+      };
+    case "ADDRESS_FILTER":
+      return {
+        ...state,
+        addressFilter: action.payload,
+        filteredRooms: applyFilter(
+          state.rooms,
+          action.payload,
+          state.priceFilter
+        ),
+      };
+    case "CLEAR_ADDRESS_FILTER":
+      return {
+        ...state,
+        addressFilter: null,
+        priceFilter: 500,
+        filteredRooms: state.rooms,
+      };
     default:
       throw new Error("No matched Action");
   }
 };
 
 export default reducer;
+
+const applyFilter = (rooms, address, price) => {
+  let filteredRooms = rooms;
+  if (address) {
+    console.log(address);
+    const { longitude, latitude } = address;
+    filteredRooms = filteredRooms.filter((room) => {
+      const longitudeDiff =
+        longitude > room.longitude
+          ? longitude - room.longitude
+          : longitude + room.longitude;
+      const latitudeDiff =
+        latitude > room.latitude
+          ? latitude - room.latitude
+          : latitude + room.latitude;
+      return longitudeDiff <= 1 && latitudeDiff <= 1;
+    });
+  }
+  if (price < 500) {
+    filteredRooms = filteredRooms.filter((room) => room.price <= price);
+  }
+  return filteredRooms;
+  //from the return value of this function  the rooms will be filtered and will set in the global context variable named filterRooms this will control the clusters in the clusterMap component
+};

@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useReducer, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from "react";
 import reducer from "./reducer";
 
 const initialState = {
@@ -15,17 +21,20 @@ const initialState = {
     file: null,
     photoURL: "",
   },
-  images:[],
-  details:{
-    title:'',
-    description:'',
-    price:0
+  images: [],
+  details: {
+    title: "",
+    description: "",
+    price: 0,
   },
-  location:{
-    longitude:0,
-    latitude:0,
+  location: {
+    longitude: 0,
+    latitude: 0,
   },
-  rooms:[]
+  rooms: [],
+  priceFilter: 500,
+  addressFilter: null,
+  filteredRooms: [],
 };
 
 const Context = createContext(initialState);
@@ -36,19 +45,21 @@ export const useValue = () => {
 
 const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const mapRef=useRef()
+  const mapRef = useRef();
+  const containerRef = useRef();
   useEffect(() => {
-    const userDetails = JSON.parse(localStorage.getItem(
-      process.env.REACT_APP_USER_DETAILS
-    ));
-    console.log(userDetails);
+    const userDetails = JSON.parse(
+      localStorage.getItem(process.env.REACT_APP_USER_DETAILS)
+    );
     if (userDetails) {
       dispatch({ type: "UPDATE_USER", payload: userDetails });
     }
   }, []);
 
   return (
-    <Context.Provider value={{ state, dispatch,mapRef }}>{children}</Context.Provider>
+    <Context.Provider value={{ state, dispatch, mapRef, containerRef }}>
+      {children}
+    </Context.Provider>
   );
 };
 
