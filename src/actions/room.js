@@ -5,7 +5,7 @@ const url = process.env.REACT_APP_SERVER_URL + "/api/room";
 export const createRoom = async (room, currentUser, dispatch,setPage) => {
   dispatch({ type: "START_LOADING" });
   const result = await fetchData(
-    { url, body: room, token: currentUser?.token },
+    { url:url+'/create', body: room, token: currentUser?.token },
     dispatch
   );
 
@@ -23,3 +23,13 @@ export const createRoom = async (room, currentUser, dispatch,setPage) => {
   }
   dispatch({ type: "END_LOADING" });
 };
+
+export const getRooms = async ( dispatch) => {
+  const result  =await fetchData({url,method:'GET'},dispatch)
+  if (result) {
+    dispatch({
+      type: "UPDATE_ROOMS",
+      payload: result
+    });
+  }
+}
