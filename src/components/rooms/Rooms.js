@@ -7,15 +7,15 @@ import {
   ImageListItem,
   ImageListItemBar,
   Rating,
-  Toolbar,
   Tooltip,
 } from "@mui/material";
 import React from "react";
 import { useValue } from "../../context/ContextProvider";
 
-function Room() {
+function Rooms() {
   const {
     state: { filteredRooms },
+    dispatch,
   } = useValue();
   return (
     <Container>
@@ -50,6 +50,9 @@ function Room() {
                   alt={room.title}
                   loading="lazy"
                   style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    dispatch({ type: "UPDATE_ROOM", payload: room })
+                  }
                 />
                 <ImageListItemBar
                   title={room.title}
@@ -74,4 +77,4 @@ function Room() {
   );
 }
 
-export default Room;
+export default Rooms;
