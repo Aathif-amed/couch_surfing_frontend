@@ -60,7 +60,7 @@ function ClusterMap() {
   }, [mapRef?.current]);
   return (
     <ReactMapGL
-      initialViewState={{ latitude: 51.5072, longitude: 0.1276 }}
+      initialViewState={{ latitude: 20.5937, longitude: 78.9629 }}
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
       mapStyle="mapbox://styles/mapbox/streets-v11"
       ref={mapRef}
