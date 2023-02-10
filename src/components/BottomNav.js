@@ -9,22 +9,27 @@ import React, { useEffect, useRef, useState } from "react";
 import AddRoom from "./addRoom/AddRoom";
 import Protected from "./protected/Protected";
 import ClusterMap from "./map/ClusterMap";
-import Room from "./rooms/Room";
+import Rooms from "./rooms/Rooms";
 
 function BottomNav() {
   const [value, setValue] = useState(0);
-  const ref= useRef()
-  useEffect(()=>{
-    ref.current.ownerDocument.body.scrollTop=0
-  },[value])
+  const ref = useRef();
+  useEffect(() => {
+    ref.current.ownerDocument.body.scrollTop = 0;
+  }, [value]);
   return (
     <Box ref={ref}>
       {
         {
           0: <ClusterMap />,
-          1: <Room />,
+          1: <Rooms />,
           //the children component can be accessed only if logged in
-          2:  <Protected> <AddRoom setPage={setValue}/></Protected>,
+          2: (
+            <Protected>
+              {" "}
+              <AddRoom setPage={setValue} />
+            </Protected>
+          ),
         }[value]
       }
       <Paper
