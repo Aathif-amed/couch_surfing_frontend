@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer, useRef } from "react";
 import reducer from "./reducer";
 
 const initialState = {
@@ -36,6 +36,7 @@ export const useValue = () => {
 
 const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const mapRef=useRef()
   useEffect(() => {
     const userDetails = JSON.parse(localStorage.getItem(
       process.env.REACT_APP_USER_DETAILS
@@ -47,7 +48,7 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
+    <Context.Provider value={{ state, dispatch,mapRef }}>{children}</Context.Provider>
   );
 };
 
