@@ -42,7 +42,6 @@ function Room() {
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           return setPlace(data.features[0]);
         });
     }
