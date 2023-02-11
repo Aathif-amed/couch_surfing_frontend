@@ -1,20 +1,17 @@
 import React from "react";
-import Loading from "./components/Loading";
-import Navbar from "./components/Navbar";
-import Notification from "./components/Notification";
-import BottomNav from "./components/BottomNav";
-import Login from "./components/user/Login";
-import Room from "./components/rooms/Room";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <>
-      <Loading />
-      <Notification />
-      <Login />
-      <Navbar />
-      <BottomNav />
-      <Room />
+      <BrowserRouter>
+        <Routes>
+          <Route path="dashboard/*" element={<Dashboard />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
