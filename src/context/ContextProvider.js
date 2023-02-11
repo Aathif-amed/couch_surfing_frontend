@@ -32,6 +32,7 @@ const initialState = {
     latitude: 0,
   },
   rooms: [],
+  users: [],
   priceFilter: 500,
   addressFilter: null,
   filteredRooms: [],
