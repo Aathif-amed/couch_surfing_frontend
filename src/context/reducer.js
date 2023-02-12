@@ -88,6 +88,11 @@ const reducer = (state, action) => {
         ...state,
         users: action.payload,
       };
+    case "DELETE_USER":
+      return {
+        ...state,
+        users: state.users.filter((user) => user._id !== action.payload),
+      };
     case "DELETE_ROOM":
       return {
         ...state,

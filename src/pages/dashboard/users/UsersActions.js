@@ -1,14 +1,23 @@
-import { Box, CircularProgress, Fab } from "@mui/material";
+import { Box, CircularProgress, Fab, IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Check, Save } from "@mui/icons-material";
+import {
+  Check,
+  Delete,
+  DeleteForever,
+  DeleteOutlineTwoTone,
+  Save,
+} from "@mui/icons-material";
 import { green } from "@mui/material/colors";
-import { updateStatus } from "../../../actions/user";
+import { deleteUser, updateStatus } from "../../../actions/user";
 import { useValue } from "../../../context/ContextProvider";
 
 function UsersActions({ params, rowId, setRowId }) {
-  const { dispatch } = useValue();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const {
+    state: { currentUser },
+    dispatch,
+  } = useValue();
   // to change the button to save after the successfull submit
   useEffect(() => {
     if (rowId === params.id && success) setSuccess(false);
@@ -23,6 +32,12 @@ function UsersActions({ params, rowId, setRowId }) {
       setSuccess(true);
       setRowId(null);
     }
+    setLoading(false);
+  };
+  const handleDelete = async () => {
+    setLoading(true);
+
+    deleteUser(params.row, currentUser, dispatch);
     setLoading(false);
   };
 
@@ -64,6 +79,11 @@ function UsersActions({ params, rowId, setRowId }) {
           }}
         />
       )}
+      <Tooltip title="Delete User">
+        <IconButton onClick={handleDelete}>
+          <DeleteForever />
+        </IconButton>
+      </Tooltip>
     </Box>
   );
 }

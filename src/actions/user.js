@@ -114,3 +114,28 @@ export const updateStatus = async (updatedFields, userId, dispatch) => {
     dispatch
   );
 };
+export const deleteUser = async (user, currentUser, dispatch) => {
+  dispatch({ type: "START_LOADING" });
+  console.log(user);
+  const result = await fetchData(
+    { url: `${url}/${user._id}`, method: "DELETE", token: currentUser?.token },
+    dispatch
+  );
+
+  if (result) {
+    dispatch({
+      type: "UPDATE_ALERT",
+      payload: {
+        open: true,
+        severity: "success",
+        message: "User has been deleted successfully",
+      },
+    });
+
+    dispatch({
+      type: "DELETE_USER",
+      payload: result._id,
+    });
+  }
+  dispatch({ type: "END_LOADING" });
+};
