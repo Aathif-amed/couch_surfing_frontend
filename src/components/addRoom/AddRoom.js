@@ -1,4 +1,4 @@
-import { Send } from "@mui/icons-material";
+import { Cancel, Send } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -9,7 +9,8 @@ import {
   Stepper,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { createRoom } from "../../actions/room";
+import { useNavigate } from "react-router-dom";
+import { clearRoom, createRoom, updateRoom } from "../../actions/room";
 import { useValue } from "../../context/ContextProvider";
 import AddDetails from "./addDetails/AddDetails";
 import AddImages from "./addImages/AddImages";
@@ -17,9 +18,10 @@ import AddLocation from "./addLocation/AddLocation";
 
 function AddRoom() {
   const {
-    state: { location, details, images, currentUser },
+    state: { location, details, images, currentUser, updatedRoom },
     dispatch,
   } = useValue();
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [steps, setSteps] = useState([
     { label: "Location", completed: false },
@@ -39,13 +41,9 @@ function AddRoom() {
   };
   const checkDisabled = () => {
     //checking whether steps is out of index
-    if (activeStep < steps.length - 1) {
-      return false;
-    }
-    const index = steps.findIndex((step) => !step.completed);
-    if (index !== -1) {
-      return false;
-    }
+    if (activeStep < steps.length - 1) return false;
+    const index = findUnfinished();
+    if (index !== -1) return false;
     return true;
   };
   const findUnfinished = () => {
@@ -53,60 +51,44 @@ function AddRoom() {
     return steps.findIndex((step) => !step.completed);
   };
 
+  //checking whether location step completed
+  useEffect(() => {
+    if (location.longitude || location.latitude) {
+      if (!steps[0].completed) setComplete(0, true);
+    } else {
+      if (steps[0].completed) setComplete(0, false);
+    }
+  }, [location]);
+  //checking whether details step completed
+  useEffect(() => {
+    if (details.title.length > 4 && details.description.length > 9) {
+      if (!steps[1].completed) setComplete(1, true);
+    } else {
+      if (steps[1].completed) setComplete(1, false);
+    }
+  }, [details]);
+
+  //checking whether images step completed
+  useEffect(() => {
+    if (images.length) {
+      if (!steps[2].completed) setComplete(2, true);
+    } else {
+      if (steps[2].completed) setComplete(2, false);
+    }
+  }, [images]);
+
   const setComplete = (index, status) => {
     setSteps((steps) => {
       steps[index].completed = status;
       return [...steps];
     });
   };
-  //checking whether location step completed
-  useEffect(() => {
-    if (location.longitude || location.latitude) {
-      if (!steps[0].completed) {
-        setComplete(0, true);
-      }
-    } else {
-      if (steps[0].completed) {
-        setComplete(0, false);
-      }
-    }
-  }, [location]);
-
-  //checking whether  details completed
-  useEffect(() => {
-    if (details.title.length > 4 && details.description.length > 9) {
-      if (!steps[1].completed) {
-        setComplete(1, true);
-      }
-    } else {
-      if (steps[1].completed) {
-        setComplete(1, false);
-      }
-    }
-  }, [details]);
-
-  //checking whether images completed
-  useEffect(() => {
-    if (images.length) {
-      if (!steps[2].completed) {
-        setComplete(2, true);
-      }
-    } else {
-      if (steps[2].completed) {
-        setComplete(2, false);
-      }
-    }
-  }, [images]);
 
   useEffect(() => {
     if (findUnfinished() === -1) {
-      if (!showSubmit) {
-        setShowSubmit(true);
-      } else {
-        if (showSubmit) {
-          setShowSubmit(false);
-        }
-      }
+      if (!showSubmit) setShowSubmit(true);
+    } else {
+      if (showSubmit) setShowSubmit(false);
     }
   }, [steps]);
   const handleSubmit = () => {
@@ -118,7 +100,18 @@ function AddRoom() {
       description: details.description,
       images,
     };
+    if (updatedRoom)
+      return updateRoom(room, currentUser, dispatch, updatedRoom);
     createRoom(room, currentUser, dispatch);
+  };
+  const handleCancel = () => {
+    if (updatedRoom) {
+      navigate("/dashboard/rooms");
+      clearRoom(dispatch);
+    } else {
+      dispatch({ type: "UPDATE_SECTION", payload: 0 });
+      clearRoom(dispatch);
+    }
   };
   return (
     <Container sx={{ my: 4 }}>
@@ -164,17 +157,29 @@ function AddRoom() {
             Next
           </Button>
         </Stack>
-        {showSubmit && (
-          <Stack sx={{ alignItems: "center" }}>
+
+        <Stack
+          sx={{ alignItems: "center", justifyContent: "center", gap: 2 }}
+          direction="row"
+        >
+          {showSubmit && (
             <Button
               variant="contained"
               endIcon={<Send />}
               onClick={handleSubmit}
             >
-              Submit
+              {updatedRoom ? "Update" : "Submit"}
             </Button>
-          </Stack>
-        )}
+          )}
+          <Button
+            variant="outlined"
+            color="error"
+            endIcon={<Cancel />}
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+        </Stack>
       </Box>
     </Container>
   );
