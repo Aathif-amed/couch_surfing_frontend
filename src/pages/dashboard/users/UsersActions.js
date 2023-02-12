@@ -29,10 +29,7 @@ function UsersActions({ params, rowId, setRowId }) {
     setLoading(false);
   };
   const handleDelete = async () => {
-    setLoading(true);
-
     deleteUser(params.row, currentUser, dispatch);
-    setLoading(false);
   };
 
   return (
