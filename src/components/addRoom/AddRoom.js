@@ -15,9 +15,10 @@ import AddDetails from "./addDetails/AddDetails";
 import AddImages from "./addImages/AddImages";
 import AddLocation from "./addLocation/AddLocation";
 
-function AddRoom({setPage}) {
+function AddRoom() {
   const {
-    state: { location, details, images, currentUser },dispatch
+    state: { location, details, images, currentUser },
+    dispatch,
   } = useValue();
   const [activeStep, setActiveStep] = useState(0);
   const [steps, setSteps] = useState([
@@ -109,15 +110,15 @@ function AddRoom({setPage}) {
     }
   }, [steps]);
   const handleSubmit = () => {
-    const room={
-      longitude:location.longitude,
-      latitude:location.latitude,
-      price:details.price,
-      title:details.title,
-      description:details.description,
-      images
-    }
-    createRoom(room,currentUser,dispatch,setPage)
+    const room = {
+      longitude: location.longitude,
+      latitude: location.latitude,
+      price: details.price,
+      title: details.title,
+      description: details.description,
+      images,
+    };
+    createRoom(room, currentUser, dispatch);
   };
   return (
     <Container sx={{ my: 4 }}>
@@ -145,10 +146,7 @@ function AddRoom({setPage}) {
             2: <AddImages />,
           }[activeStep]
         }
-        <Stack
-          direction="row"
-          sx={{ pt: 2, justifyContent: "space-around" }}
-        >
+        <Stack direction="row" sx={{ pt: 2, justifyContent: "space-around" }}>
           <Button
             color="inherit"
             disabled={!activeStep}

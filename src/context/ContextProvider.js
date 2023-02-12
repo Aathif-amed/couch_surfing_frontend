@@ -31,12 +31,14 @@ const initialState = {
     longitude: 0,
     latitude: 0,
   },
+  updatedRoom: null,
   rooms: [],
   users: [],
   priceFilter: 500,
   addressFilter: null,
   filteredRooms: [],
   room: null,
+  section: 0,
 };
 
 const Context = createContext(initialState);
