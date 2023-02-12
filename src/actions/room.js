@@ -19,7 +19,7 @@ export const createRoom = async (room, currentUser, dispatch) => {
         message: "Room has been added successfully",
       },
     });
-    dispatch({ type: "RESET_ROOM_DETAILS" });
+    clearRoom(dispatch);
     dispatch({ type: "UPDATE_SECTION", payload: 0 });
     dispatch({
       type: "UPDATE_ROOM",
@@ -39,6 +39,37 @@ export const getRooms = async (dispatch) => {
   }
 };
 
+export const updateRoom = async (room, currentUser, dispatch, updatedRoom) => {
+  dispatch({ type: "START_LOADING" });
+  const result = await fetchData(
+    {
+      url: `${url}/${updatedRoom._id}`,
+      method: "PATCH",
+      body: room,
+      token: currentUser?.token,
+    },
+    dispatch
+  );
+
+  if (result) {
+    dispatch({
+      type: "UPDATE_ALERT",
+      payload: {
+        open: true,
+        severity: "success",
+        message: "Room has been updated successfully",
+      },
+    });
+
+    clearRoom(dispatch);
+    dispatch({ type: "UPDATE_SECTION", payload: 0 });
+    dispatch({
+      type: "UPDATE_ROOM",
+      payload: result,
+    });
+  }
+  dispatch({ type: "END_LOADING" });
+};
 export const deleteRoom = async (room, currentUser, dispatch) => {
   dispatch({ type: "START_LOADING" });
   const result = await fetchData(
@@ -63,4 +94,7 @@ export const deleteRoom = async (room, currentUser, dispatch) => {
     deleteImages(room.images, room.uid);
   }
   dispatch({ type: "END_LOADING" });
+};
+export const clearRoom = async (dispatch) => {
+  dispatch({ type: "RESET_ROOM_DETAILS" });
 };

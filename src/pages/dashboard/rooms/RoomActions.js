@@ -2,7 +2,7 @@ import { Delete, Edit, Preview } from "@mui/icons-material";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteRoom } from "../../../actions/room";
+import { clearRoom, deleteRoom } from "../../../actions/room";
 import { useValue } from "../../../context/ContextProvider";
 
 function RoomActions({ params }) {
@@ -15,6 +15,7 @@ function RoomActions({ params }) {
   const navigate = useNavigate();
 
   const handleEdit = () => {
+    clearRoom(dispatch);
     dispatch({ type: "UPDATE_LOCATION", payload: { longitude, latitude } });
     dispatch({
       type: "UPDATE_DETAILS",
