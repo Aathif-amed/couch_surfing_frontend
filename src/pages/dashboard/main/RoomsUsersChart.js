@@ -14,7 +14,6 @@ const months = 4;
 const today = new Date();
 const tempData = [];
 for (let i = 0; i < months; i++) {
-  console.log("ssss");
   const date = new Date(
     today.getFullYear(),
     today.getMonth() - (months - (i + 1))
