@@ -1,14 +1,31 @@
 import { Delete, Edit, Preview } from "@mui/icons-material";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { deleteRoom } from "../../../actions/room";
 import { useValue } from "../../../context/ContextProvider";
 
 function RoomActions({ params }) {
+  const { _id, longitude, latitude, price, title, description, images, uid } =
+    params.row;
   const {
     state: { currentUser },
     dispatch,
   } = useValue();
+  const navigate = useNavigate();
+
+  const handleEdit = () => {
+    dispatch({ type: "UPDATE_LOCATION", payload: { longitude, latitude } });
+    dispatch({
+      type: "UPDATE_DETAILS",
+      payload: { price, title, description },
+    });
+    dispatch({ type: "UPDATE_IMAGES", payload: images });
+    dispatch({ type: "UPDATE_UPDATED_ROOM", payload: { _id, uid } });
+    dispatch({ type: "UPDATE_SECTION", payload: 2 });
+    navigate("/");
+  };
+
   return (
     <Box>
       <Tooltip title="View Room">
@@ -19,7 +36,7 @@ function RoomActions({ params }) {
         </IconButton>
       </Tooltip>
       <Tooltip title="Edit Room">
-        <IconButton onClick={() => {}}>
+        <IconButton onClick={handleEdit}>
           <Edit />
         </IconButton>
       </Tooltip>
