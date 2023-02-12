@@ -1,12 +1,6 @@
 import { Box, CircularProgress, Fab, IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
-import {
-  Check,
-  Delete,
-  DeleteForever,
-  DeleteOutlineTwoTone,
-  Save,
-} from "@mui/icons-material";
+import { Check, DeleteForever, Save } from "@mui/icons-material";
 import { green } from "@mui/material/colors";
 import { deleteUser, updateStatus } from "../../../actions/user";
 import { useValue } from "../../../context/ContextProvider";
