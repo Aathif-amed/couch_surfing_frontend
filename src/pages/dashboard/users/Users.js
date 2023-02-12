@@ -62,7 +62,7 @@ function Users({ setSelectedLink, link }) {
       {
         field: "actions",
         headerName: "Actions",
-        width: 220,
+        type: "actions",
         renderCell: (params) => (
           <UsersActions {...{ params, rowId, setRowId }} />
         ),
