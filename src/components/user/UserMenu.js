@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { storeRoom } from "../../actions/room";
 import { logout } from "../../actions/user";
 import { useValue } from "../../context/ContextProvider";
-import CheckGUserToken from "../../hooks/CheckGUserToken";
+import CheckUserToken from "../../hooks/CheckUserToken";
 import Profile from "./Profile";
 
 function UserMenu({ anchorUserMenu, setAnchorUserMenu }) {
-  CheckGUserToken();
+  CheckUserToken();
   const navigate = useNavigate();
   const {
     dispatch,

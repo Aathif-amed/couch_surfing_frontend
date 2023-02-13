@@ -1,11 +1,11 @@
 import { Avatar, Box, IconButton, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import { useValue } from "../../context/ContextProvider";
-import CheckGUserToken from "../../hooks/CheckGUserToken";
+import CheckUserToken from "../../hooks/CheckUserToken";
 import UserMenu from "./UserMenu";
 
 function UserIcons() {
-  CheckGUserToken();
+  CheckUserToken();
 
   const {
     state: { currentUser },
