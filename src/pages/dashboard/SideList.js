@@ -18,10 +18,8 @@ import {
 import {
   ChevronLeft,
   Dashboard,
-  Inbox,
   KingBed,
   Logout,
-  Mail,
   MarkChatUnread,
   NotificationsActive,
   PeopleAlt,
@@ -33,6 +31,8 @@ import Users from "./users/Users";
 import Rooms from "./rooms/Rooms";
 import Requests from "./requests/Requests";
 import Messages from "./messages/Messages";
+import { storeRoom } from "../../actions/room";
+import { logout } from "../../actions/user";
 
 const drawerWidth = 240;
 
@@ -84,7 +84,15 @@ const Drawer = styled(MuiDrawer, {
 
 function SideList({ open, setOpen }) {
   const {
-    state: { currentUser },
+    state: {
+      currentUser,
+      location,
+      details,
+      images,
+      updatedRoom,
+      deletedImages,
+      addedImages,
+    },
     dispatch,
   } = useValue();
   const [selectedLink, setSelectedLink] = useState("");
@@ -126,7 +134,16 @@ function SideList({ open, setOpen }) {
 
   const navigate = useNavigate();
   const handleLogout = () => {
-    dispatch({ type: "UPDATE_USER", payload: null });
+    storeRoom(
+      location,
+      details,
+      images,
+      updatedRoom,
+      deletedImages,
+      addedImages,
+      currentUser.id
+    );
+    logout(dispatch);
     navigate("/");
   };
   return (
