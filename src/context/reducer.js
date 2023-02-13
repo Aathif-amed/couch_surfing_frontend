@@ -31,6 +31,16 @@ const reducer = (state, action) => {
       return { ...state, location: action.payload };
     case "UPDATE_UPDATED_ROOM":
       return { ...state, updatedRoom: action.payload };
+    case "UPDATE_DELETED_IMAGES":
+      return {
+        ...state,
+        deletedImages: [...state.deletedImages, ...action.payload],
+      };
+    case "UPDATE_ADDED_IMAGES":
+      return {
+        ...state,
+        addedImages: [...state.addedImages, ...action.payload],
+      };
     case "RESET_ROOM_DETAILS":
       return {
         ...state,
@@ -45,6 +55,8 @@ const reducer = (state, action) => {
           latitude: 0,
         },
         updatedRoom: null,
+        deletedImages: [],
+        addedImages: [],
       };
     case "UPDATE_ROOMS":
       return {

@@ -32,6 +32,8 @@ const initialState = {
     latitude: 0,
   },
   updatedRoom: null,
+  addedImages: [],
+  deletedImages: [],
   rooms: [],
   users: [],
   priceFilter: 500,
@@ -59,6 +61,23 @@ const ContextProvider = ({ children }) => {
       dispatch({ type: "UPDATE_USER", payload: userDetails });
     }
   }, []);
+  useEffect(() => {
+    if (state.currentUser) {
+      console.log(state.currentUser);
+      const room = JSON.parse(localStorage.getItem(state.currentUser.id));
+      if (room) {
+        dispatch({ type: "UPDATE_LOCATION", payload: room.location });
+        dispatch({ type: "UPDATE_DETAILS", payload: room.details });
+        dispatch({ type: "UPDATE_IMAGES", payload: room.images });
+        dispatch({ type: "UPDATE_UPDATED_ROOM", payload: room.updatedRoom });
+        dispatch({
+          type: "UPDATE_DELETED_IMAGES",
+          payload: room.deletedImages,
+        });
+        dispatch({ type: "UPDATE_ADDED_IMAGES", payload: room.addedImages });
+      }
+    }
+  }, [state.currentUser]);
 
   return (
     <Context.Provider value={{ state, dispatch, mapRef, containerRef }}>
