@@ -9,13 +9,17 @@ function RoomActions({ params }) {
   const { _id, longitude, latitude, price, title, description, images, uid } =
     params.row;
   const {
-    state: { currentUser },
+    state: { currentUser, updatedRoom, addedImages, images: newImages },
     dispatch,
   } = useValue();
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    clearRoom(dispatch);
+    if (updatedRoom) {
+      clearRoom(dispatch, currentUser, addedImages, updatedRoom);
+    } else {
+      clearRoom(dispatch, currentUser, newImages);
+    }
     dispatch({ type: "UPDATE_LOCATION", payload: { longitude, latitude } });
     dispatch({
       type: "UPDATE_DETAILS",

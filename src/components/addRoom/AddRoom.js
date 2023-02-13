@@ -18,7 +18,15 @@ import AddLocation from "./addLocation/AddLocation";
 
 function AddRoom() {
   const {
-    state: { location, details, images, currentUser, updatedRoom },
+    state: {
+      location,
+      details,
+      images,
+      currentUser,
+      updatedRoom,
+      deletedImages,
+      addedImages,
+    },
     dispatch,
   } = useValue();
   const navigate = useNavigate();
@@ -101,16 +109,22 @@ function AddRoom() {
       images,
     };
     if (updatedRoom)
-      return updateRoom(room, currentUser, dispatch, updatedRoom);
+      return updateRoom(
+        room,
+        currentUser,
+        dispatch,
+        updatedRoom,
+        deletedImages
+      );
     createRoom(room, currentUser, dispatch);
   };
   const handleCancel = () => {
     if (updatedRoom) {
       navigate("/dashboard/rooms");
-      clearRoom(dispatch);
+      clearRoom(dispatch, currentUser, addedImages, updatedRoom);
     } else {
       dispatch({ type: "UPDATE_SECTION", payload: 0 });
-      clearRoom(dispatch);
+      clearRoom(dispatch, currentUser, images);
     }
   };
   return (

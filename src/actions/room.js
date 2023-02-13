@@ -19,7 +19,7 @@ export const createRoom = async (room, currentUser, dispatch) => {
         message: "Room has been added successfully",
       },
     });
-    clearRoom(dispatch);
+    clearRoom(dispatch, currentUser);
     dispatch({ type: "UPDATE_SECTION", payload: 0 });
     dispatch({
       type: "UPDATE_ROOM",
@@ -39,7 +39,13 @@ export const getRooms = async (dispatch) => {
   }
 };
 
-export const updateRoom = async (room, currentUser, dispatch, updatedRoom) => {
+export const updateRoom = async (
+  room,
+  currentUser,
+  dispatch,
+  updatedRoom,
+  deletedImages
+) => {
   dispatch({ type: "START_LOADING" });
   const result = await fetchData(
     {
@@ -61,7 +67,7 @@ export const updateRoom = async (room, currentUser, dispatch, updatedRoom) => {
       },
     });
 
-    clearRoom(dispatch);
+    clearRoom(dispatch, currentUser, deletedImages, updatedRoom);
     dispatch({ type: "UPDATE_SECTION", payload: 0 });
     dispatch({
       type: "UPDATE_ROOM",
@@ -95,6 +101,50 @@ export const deleteRoom = async (room, currentUser, dispatch) => {
   }
   dispatch({ type: "END_LOADING" });
 };
-export const clearRoom = async (dispatch) => {
+export const clearRoom = async (
+  dispatch,
+  currentUser,
+  images = [],
+  updatedRoom = null
+) => {
   dispatch({ type: "RESET_ROOM_DETAILS" });
+  if (updatedRoom) {
+    deleteImages(images, updatedRoom.uid);
+  } else {
+    deleteImages(images, currentUser.uid);
+  }
+};
+
+export const storeRoom = (
+  location,
+  details,
+  images,
+  updatedRoom,
+  deletedImages,
+  addedImages,
+  userId
+) => {
+  if (
+    location.longitude ||
+    location.latitude ||
+    details.price ||
+    details.title ||
+    details.description ||
+    images.length
+  ) {
+    localStorage.setItem(
+      userId,
+      JSON.stringify({
+        location,
+        details,
+        images,
+        updatedRoom,
+        deletedImages,
+        addedImages,
+      })
+    );
+    return true;
+  } else {
+    return false;
+  }
 };
