@@ -131,14 +131,8 @@ const applyFilter = (rooms, address, price) => {
     console.log(address);
     const { longitude, latitude } = address;
     filteredRooms = filteredRooms.filter((room) => {
-      const longitudeDiff =
-        longitude > room.longitude
-          ? longitude - room.longitude
-          : longitude + room.longitude;
-      const latitudeDiff =
-        latitude > room.latitude
-          ? latitude - room.latitude
-          : latitude + room.latitude;
+      const longitudeDiff = Math.abs(longitude - room.longitude);
+      const latitudeDiff = Math.abs(latitude - room.latitude);
       return longitudeDiff <= 1 && latitudeDiff <= 1;
     });
   }
