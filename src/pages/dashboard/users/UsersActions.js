@@ -2,7 +2,7 @@ import { Box, CircularProgress, Fab, IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Check, DeleteForever, Save } from "@mui/icons-material";
 import { green } from "@mui/material/colors";
-import { deleteUser, updateStatus } from "../../../actions/user";
+import { deleteUser, getUsers, updateStatus } from "../../../actions/user";
 import { useValue } from "../../../context/ContextProvider";
 
 function UsersActions({ params, rowId, setRowId }) {
@@ -21,10 +21,16 @@ function UsersActions({ params, rowId, setRowId }) {
     setLoading(true);
 
     const { role, active, _id } = params.row;
-    const result = await updateStatus({ role, active }, _id, dispatch);
+    const result = await updateStatus(
+      { role, active },
+      _id,
+      dispatch,
+      currentUser
+    );
     if (result) {
       setSuccess(true);
       setRowId(null);
+      getUsers(dispatch, currentUser);
     }
     setLoading(false);
   };
@@ -71,7 +77,10 @@ function UsersActions({ params, rowId, setRowId }) {
         />
       )}
       <Tooltip title="Delete User">
-        <IconButton onClick={handleDelete}>
+        <IconButton
+          onClick={handleDelete}
+          disabled={currentUser?.role !== "admin"}
+        >
           <DeleteForever />
         </IconButton>
       </Tooltip>

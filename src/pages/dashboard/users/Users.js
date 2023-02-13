@@ -9,7 +9,7 @@ import UsersActions from "./UsersActions";
 
 function Users({ setSelectedLink, link }) {
   const {
-    state: { users },
+    state: { users, currentUser },
     dispatch,
   } = useValue();
 
@@ -19,7 +19,7 @@ function Users({ setSelectedLink, link }) {
   useEffect(() => {
     setSelectedLink(link);
     if (users.length === 0) {
-      getUsers(dispatch);
+      getUsers(dispatch, currentUser);
     }
   }, []);
 
@@ -42,14 +42,14 @@ function Users({ setSelectedLink, link }) {
         width: 100,
         type: "singleSelect",
         valueOptions: ["basic", "editor", "admin"],
-        editable: true,
+        editable: currentUser?.role === "admin",
       },
       {
         field: "active",
         headerName: "Active",
         width: 100,
         type: "boolean",
-        editable: true,
+        editable: currentUser?.role === "admin",
       },
       {
         field: "createdAt",

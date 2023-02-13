@@ -5,11 +5,12 @@ import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { getRooms } from "../../../actions/room";
 import { useValue } from "../../../context/ContextProvider";
+import isAdmin from "../utils/isAdmin";
 import RoomActions from "./RoomActions";
 
 function Rooms({ setSelectedLink, link }) {
   const {
-    state: { rooms },
+    state: { rooms, currentUser },
     dispatch,
   } = useValue();
 
@@ -84,7 +85,11 @@ function Rooms({ setSelectedLink, link }) {
       </Typography>
       <DataGrid
         columns={columns}
-        rows={rooms}
+        rows={
+          isAdmin(currentUser)
+            ? rooms
+            : rooms.filter((room) => room.uid === currentUser.id)
+        }
         getRowId={(row) => row._id}
         rowsPerPageOptions={[5, 15, 30]}
         pageSize={pageSize}

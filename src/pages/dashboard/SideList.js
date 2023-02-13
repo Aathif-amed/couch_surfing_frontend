@@ -20,8 +20,6 @@ import {
   Dashboard,
   KingBed,
   Logout,
-  MarkChatUnread,
-  NotificationsActive,
   PeopleAlt,
 } from "@mui/icons-material";
 import { useValue } from "../../context/ContextProvider";
@@ -29,10 +27,10 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Main from "./main/Main";
 import Users from "./users/Users";
 import Rooms from "./rooms/Rooms";
-import Requests from "./requests/Requests";
-import Messages from "./messages/Messages";
 import { storeRoom } from "../../actions/room";
 import { logout } from "../../actions/user";
+import CheckUserToken from "../../hooks/CheckUserToken";
+import isAdmin from "./utils/isAdmin";
 
 const drawerWidth = 240;
 
@@ -83,6 +81,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function SideList({ open, setOpen }) {
+  CheckUserToken();
   const {
     state: {
       currentUser,
@@ -96,37 +95,31 @@ function SideList({ open, setOpen }) {
     dispatch,
   } = useValue();
   const [selectedLink, setSelectedLink] = useState("");
+  console.log(currentUser);
   const list = useMemo(
     () => [
-      {
-        title: "Main",
-        icon: <Dashboard />,
-        link: "",
-        component: <Main {...{ setSelectedLink, link: "" }} />,
-      },
-      {
-        title: "Users",
-        icon: <PeopleAlt />,
-        link: "users",
-        component: <Users {...{ setSelectedLink, link: "users" }} />,
-      },
+      ...(isAdmin(currentUser)
+        ? [
+            {
+              title: "Main",
+              icon: <Dashboard />,
+              link: "",
+              component: <Main {...{ setSelectedLink, link: "" }} />,
+            },
+            {
+              title: "Users",
+              icon: <PeopleAlt />,
+              link: "users",
+              component: <Users {...{ setSelectedLink, link: "users" }} />,
+            },
+          ]
+        : []),
+
       {
         title: "Rooms",
         icon: <KingBed />,
         link: "rooms",
         component: <Rooms {...{ setSelectedLink, link: "rooms" }} />,
-      },
-      {
-        title: "Requests",
-        icon: <NotificationsActive />,
-        link: "requests",
-        component: <Requests {...{ setSelectedLink, link: "requests" }} />,
-      },
-      {
-        title: "Messages",
-        icon: <MarkChatUnread />,
-        link: "messages",
-        component: <Messages {...{ setSelectedLink, link: "messages" }} />,
       },
     ],
     []
@@ -144,7 +137,6 @@ function SideList({ open, setOpen }) {
       currentUser.id
     );
     logout(dispatch);
-    navigate("/");
   };
   return (
     <>
@@ -186,7 +178,13 @@ function SideList({ open, setOpen }) {
         </List>
         <Divider />
         <Box sx={{ mx: "auto", mt: 3, mb: 1 }}>
-          <Tooltip title={currentUser?.name || ""}>
+          <Tooltip
+            title={
+              currentUser.google
+                ? currentUser?.name
+                : currentUser?.fName + " " + currentUser?.lName
+            }
+          >
             <Avatar
               src={currentUser?.photoURL}
               {...(open && { sx: { width: 100, height: 100 } })}
@@ -196,10 +194,14 @@ function SideList({ open, setOpen }) {
         <Box sx={{ textAlign: "center" }}>
           {open && (
             <Typography>
-              {currentUser?.fName + " " + currentUser?.lName}
+              {currentUser.google
+                ? currentUser?.name
+                : currentUser?.fName + " " + currentUser?.lName}
             </Typography>
           )}
-          <Typography variant="body2">{currentUser?.role || "role"}</Typography>
+          <Typography variant="body2">
+            {currentUser?.role || "basic"}
+          </Typography>
           {open && (
             <Typography variant="body2">{currentUser?.email}</Typography>
           )}
@@ -216,6 +218,16 @@ function SideList({ open, setOpen }) {
           {list.map((item) => (
             <Route key={item.title} path={item.link} element={item.component} />
           ))}
+          <Route
+            path="*"
+            element={
+              isAdmin(currentUser) ? (
+                <Main {...{ setSelectedLink, link: "" }} />
+              ) : (
+                <Rooms {...{ setSelectedLink, link: "rooms" }} />
+              )
+            }
+          />
         </Routes>
       </Box>
     </>

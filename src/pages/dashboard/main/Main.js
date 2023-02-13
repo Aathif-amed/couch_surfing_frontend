@@ -20,7 +20,7 @@ import RoomsUsersChart from "./RoomsUsersChart";
 
 function Main({ setSelectedLink, link }) {
   const {
-    state: { rooms, users },
+    state: { rooms, users, currentUser },
     dispatch,
   } = useValue();
   useEffect(() => {
@@ -29,7 +29,7 @@ function Main({ setSelectedLink, link }) {
       getRooms(dispatch);
     }
     if (users.length === 0) {
-      getUsers(dispatch);
+      getUsers(dispatch, currentUser);
     }
   }, []);
   return (
