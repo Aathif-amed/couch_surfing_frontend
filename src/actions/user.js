@@ -139,3 +139,8 @@ export const deleteUser = async (user, currentUser, dispatch) => {
   }
   dispatch({ type: "END_LOADING" });
 };
+
+export const logout = (dispatch) => {
+  dispatch({ type: "UPDATE_USER", payload: null });
+  dispatch({ type: "RESET_ROOM_DETAILS" });
+};
